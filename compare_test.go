@@ -370,6 +370,38 @@ func TestOnlyStrict(t *testing.T) {
 			},
 		},
 		{
+			platform: "windows(10.0.26100)/amd64",
+			matches: map[bool][]string{
+				true: {
+					"windows/amd64",
+					"windows(10.0.26100)/amd64",
+					"windows(10.0.20348)/amd64",
+				},
+				false: {
+					"linux/amd64",
+					"linux/arm/v7",
+					"linux/arm64",
+					"windows/arm",
+				},
+			},
+		},
+		{
+			platform: "windows(10.0.20348)/amd64",
+			matches: map[bool][]string{
+				true: {
+					"windows/amd64",
+					"windows(10.0.20348)/amd64",
+				},
+				false: {
+					"linux/amd64",
+					"linux/arm/v7",
+					"linux/arm64",
+					"windows/arm",
+					"windows(10.0.26100)/amd64",
+				},
+			},
+		},
+		{
 			platform: "windows(10.0.17763)/amd64",
 			matches: map[bool][]string{
 				true: {

@@ -46,6 +46,9 @@ const (
 	// v21H2Server corresponds to Windows Server 2022 (ltsc2022).
 	v21H2Server = 20348
 
+	//v25H1Server corresponds to Windows Server 2025 (ltsc2025).
+	v25H1Server = 26100
+
 	// v22H2Win11 corresponds to Windows 11 (2022 Update).
 	v22H2Win11 = 22621
 )

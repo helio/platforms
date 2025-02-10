@@ -22,7 +22,7 @@ import (
 
 // Test the platform compatibility of the different
 // OS Versions considering two ltsc container image
-// versions (ltsc2019, ltsc2022)
+// versions (ltsc2019, ltsc2022, ltsc2025)
 func Test_PlatformCompat(t *testing.T) {
 	for testName, tc := range map[string]struct {
 		hostOs    uint16
@@ -57,6 +57,16 @@ func Test_PlatformCompat(t *testing.T) {
 		"Wind11Host_ltsc2022": {
 			hostOs:    v22H2Win11,
 			ctrOs:     v21H2Server,
+			shouldRun: true,
+		},
+		"WS2025Host_ltsc2022": {
+			hostOs:    v25H1Server,
+			ctrOs:     v21H2Server,
+			shouldRun: true,
+		},
+		"WS2025Host_ltsc2025": {
+			hostOs:    v25H1Server,
+			ctrOs:     v25H1Server,
 			shouldRun: true,
 		},
 	} {
