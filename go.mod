@@ -1,4 +1,4 @@
-module github.com/containerd/platforms
+module github.com/helio/platforms
 
 go 1.20
 
