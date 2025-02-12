@@ -74,14 +74,17 @@ func checkWindowsHostAndContainerCompat(host, ctr windowsOSVersion) bool {
 		return host.Build == ctr.Build
 	}
 
-	var supportedLtscRelease uint16
-	for i := len(compatLTSCReleases) - 1; i >= 0; i-- {
-		if host.Build >= compatLTSCReleases[i] {
-			supportedLtscRelease = compatLTSCReleases[i]
-			break
-		}
-	}
-	return ctr.Build >= supportedLtscRelease && ctr.Build <= host.Build
+	// TODO(mw): temporary test to see if this fixes pulling the right image
+	return host.Build == ctr.Build
+
+	//var supportedLtscRelease uint16
+	//for i := len(compatLTSCReleases) - 1; i >= 0; i-- {
+	//	if host.Build >= compatLTSCReleases[i] {
+	//		supportedLtscRelease = compatLTSCReleases[i]
+	//		break
+	//	}
+	//}
+	//return ctr.Build >= supportedLtscRelease && ctr.Build <= host.Build
 }
 
 func getWindowsOSVersion(osVersionPrefix string) windowsOSVersion {
@@ -149,7 +152,8 @@ type windowsMatchComparer struct {
 func (c *windowsMatchComparer) Less(p1, p2 specs.Platform) bool {
 	m1, m2 := c.Match(p1), c.Match(p2)
 	if m1 && m2 {
-		return p1.OSVersion > p2.OSVersion
+		r1, r2 := winRevision(p1.OSVersion), winRevision(p2.OSVersion)
+		return r1 > r2
 	}
 	return m1 && !m2
 }

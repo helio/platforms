@@ -438,3 +438,25 @@ func FuzzPlatformsParse(f *testing.F) {
 		}
 	})
 }
+
+func TestNewMatcher(t *testing.T) {
+	v25 := specs.Platform{
+		Architecture: "amd64",
+		OS:           "windows",
+		OSVersion:    "10.0.26100.2894",
+		OSFeatures:   nil,
+		Variant:      "",
+	}
+	v22 := specs.Platform{
+		Architecture: "amd64",
+		OS:           "windows",
+		OSVersion:    "10.0.20348.3091",
+		OSFeatures:   nil,
+		Variant:      "",
+	}
+	hostPlatform := v25
+	containerPlatform := v22
+
+	matchComparer := Only(hostPlatform)
+	t.Log(matchComparer.Match(containerPlatform))
+}
