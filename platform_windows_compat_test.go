@@ -17,7 +17,10 @@
 package platforms
 
 import (
+	"sort"
 	"testing"
+
+	specs "github.com/opencontainers/image-spec/specs-go/v1"
 )
 
 // Test the platform compatibility of the different
@@ -80,5 +83,55 @@ func Test_PlatformCompat(t *testing.T) {
 			}
 			t.Fatalf("Failed %v: host %v should%s be able to run guest %v", testName, tc.hostOs, expectedResultStr, tc.ctrOs)
 		}
+	}
+}
+
+func Test_PlatformOrder(t *testing.T) {
+	//comparer := Only(specs.Platform{
+	//	Architecture: "amd64",
+	//	OS:           "windows",
+	//	OSVersion:    "10.0.26100.2894",
+	//	OSFeatures:   nil,
+	//	Variant:      "",
+	//})
+	comparer := &windowsMatchComparer{Matcher: NewMatcher(specs.Platform{
+		Architecture: "amd64",
+		OS:           "windows",
+		OSVersion:    "10.0.26100.2894",
+		OSFeatures:   nil,
+		Variant:      "",
+	})}
+
+	imgs := []Platform{
+		{
+			Architecture: "amd64",
+			OS:           "linux",
+			OSVersion:    "",
+			OSFeatures:   nil,
+			Variant:      "",
+		},
+		{
+			Architecture: "amd64",
+			OS:           "windows",
+			OSVersion:    "10.0.20348.3091",
+			OSFeatures:   nil,
+			Variant:      "",
+		},
+		{
+			Architecture: "amd64",
+			OS:           "windows",
+			OSVersion:    "10.0.26100.2894",
+			OSFeatures:   nil,
+			Variant:      "",
+		},
+	}
+
+	sort.SliceStable(imgs, func(i, j int) bool {
+		return comparer.Less(imgs[i], imgs[j])
+	})
+
+	want := "10.0.26100.2894"
+	if imgs[0].OSVersion != want {
+		t.Errorf("OSVersion mismatch, want %q, got %q", want, imgs[0].OSVersion)
 	}
 }
